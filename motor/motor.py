@@ -1,4 +1,4 @@
-#import RPI.GPIO as GPIO
+#import RPi.GPIO as GPIO
 from ERROR import *
 from time import sleep
 
