@@ -20,12 +20,9 @@ class Solenoid():
 
             self.State = [x for x in args]
 
-    def Set_Input(self,*args):
+    def Set_Input(self, args):
 
-        if (len(args) != 4):
-            raise IN_LENGTH_ERROR
-        else:
-            self.IN = [port for port in args]
+        self.IN = args
 
     def Setup(self):
         for port in self.IN:
