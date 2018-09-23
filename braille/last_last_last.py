@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 
 import io
 from pdfminer.converter import TextConverter
@@ -1564,7 +1564,7 @@ def extract_text(pdf_path):
     for page in extract_text_by_page(pdf_path):
        #print(page)
         #print()
-        f = open("read_pdf", 'w')
+        f = open("read_pdf", 'w',-1,"utf-8")
         f.write(page)
     f.close()    
     
@@ -1572,7 +1572,7 @@ def extract_text(pdf_path):
 def change_lab(c_string):
     list_give = [] 
     if c_string == "txt":
-        f = open("note", "r")
+        f = open("note", "r",-1,"utf-8")
         while True: 
             line = f.readline()
             if not line: break
@@ -1581,7 +1581,7 @@ def change_lab(c_string):
         return list_give
     elif c_string == "pdf":
         extract_text('c.pdf')
-        f = open("read_pdf", "r")
+        f = open("read_pdf", "r",-1,"utf-8")
         while True:
             line = f.readline()
             if not line: break 
