@@ -31,6 +31,7 @@ class setting(QDialog):
         self.port = args[1]
         self.id = args[2]
         self.password =args[3]
+        self.remote_dir=args[4]
 
         self.setupUI()
 
@@ -50,6 +51,9 @@ class setting(QDialog):
         self.label7 = QLineEdit(self.id)
         self.label8 = QLineEdit(self.password)
 
+        self.label9=QLabel("Remote Dir:")
+        self.label10=QLineEdit(self.remote_dir)
+
         self.pushButton1= QPushButton("적용")
         self.pushButton1.clicked.connect(self.end)
 
@@ -62,7 +66,11 @@ class setting(QDialog):
         layout.addWidget(self.label6, 1, 1)
         layout.addWidget(self.label7, 2, 1)
         layout.addWidget(self.label8, 3, 1)
-        layout.addWidget(self.pushButton1, 4, 1)
+
+        layout.addWidget(self.label9, 4, 0)
+        layout.addWidget(self.label10, 4, 1)
+
+        layout.addWidget(self.pushButton1, 5, 1)
 
         self.setLayout(layout)
 
@@ -73,6 +81,7 @@ class setting(QDialog):
         self.port= self.label6.text()
         self.id = self.label7.text()
         self.password = self.label8.text()
+        self.remote_dir=self.label10.text()
         self.close()
 
 class MainWindow(QWidget):
@@ -137,6 +146,7 @@ class MainWindow(QWidget):
 
         self.label8 = QLabel("Remote Path:"+self.remote_dir, self)
         self.label8.setFixedHeight(30)
+        self.label8.setFixedWidth(200)
         self.label8.move(20,180)
 
 
@@ -146,15 +156,18 @@ class MainWindow(QWidget):
         self.label2.setText(fname[0])
 
     def setting(self):
-        set=setting(self.printer_ip,self.printer_port,self.printer_id,self.printer_password)
+        set=setting(self.printer_ip,self.printer_port,self.printer_id,self.printer_password,self.remote_dir)
         set.exec()
 
         self.printer_ip=set.ip
         self.printer_port=set.port
         self.printer_id=set.id
         self.printer_password=set.password
+        self.remote_dir=set.remote_dir
+        print(self.remote_dir)
         self.label6.setText("Printer IP:"+self.printer_ip)
         self.label7.setText("Printer Port:"+self.printer_port)
+        self.label8.setText("Remote Path:"+self.remote_dir)
 
     def printing(self):
         if self.file_dir== None or (self.file_dir[-3:] !='txt' and  self.file_dir[-3:] !='pdf'):
