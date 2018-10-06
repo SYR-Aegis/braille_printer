@@ -32,7 +32,7 @@ class setting(QDialog):
         self.id = args[2]
         self.password =args[3]
         self.remote_dir=args[4]
-
+        self.program_dir=args[5]
         self.setupUI()
 
 
@@ -53,6 +53,8 @@ class setting(QDialog):
 
         self.label9=QLabel("Remote Dir:")
         self.label10=QLineEdit(self.remote_dir)
+        self.label11=QLabel("Program Dir:")
+        self.label12 = QLineEdit(self.program_dir)
 
         self.pushButton1= QPushButton("적용")
         self.pushButton1.clicked.connect(self.end)
@@ -70,7 +72,10 @@ class setting(QDialog):
         layout.addWidget(self.label9, 4, 0)
         layout.addWidget(self.label10, 4, 1)
 
-        layout.addWidget(self.pushButton1, 5, 1)
+        layout.addWidget(self.label11, 5, 0)
+        layout.addWidget(self.label12, 5, 1)
+
+        layout.addWidget(self.pushButton1, 6, 1)
 
         self.setLayout(layout)
 
@@ -95,6 +100,7 @@ class MainWindow(QWidget):
         self.printer_password="1234"
         self.file_dir=None
         self.remote_dir="~/test"
+        self.program_dir="cd test;python3 p_test.py"
 
 
         self.setWindowTitle("SYR_Printing")
@@ -152,6 +158,10 @@ class MainWindow(QWidget):
         self.label8.setFixedWidth(200)
         self.label8.move(20,180)
 
+        self.label10 = QLabel("Program Path:"+self.program_dir, self)
+        self.label10.setFixedHeight(30)
+        self.label10.setFixedWidth(200)
+        self.label10.move(20,220)
 
     def find_file(self):
         fname=QFileDialog.getOpenFileName(self)
@@ -162,7 +172,7 @@ class MainWindow(QWidget):
         pass
 
     def setting(self):
-        set=setting(self.printer_ip,self.printer_port,self.printer_id,self.printer_password,self.remote_dir)
+        set=setting(self.printer_ip,self.printer_port,self.printer_id,self.printer_password,self.remote_dir,self.program_dir)
         set.exec()
 
         self.printer_ip=set.ip
@@ -170,10 +180,12 @@ class MainWindow(QWidget):
         self.printer_id=set.id
         self.printer_password=set.password
         self.remote_dir=set.remote_dir
+        self.program_dir=set.program_dir
         print(self.remote_dir)
         self.label6.setText("Printer IP:"+self.printer_ip)
         self.label7.setText("Printer Port:"+self.printer_port)
         self.label8.setText("Remote Path:"+self.remote_dir)
+        self.label10.setText("Program Path:" + self.program_dir)
 
     def printing(self):
         if self.file_dir== None or (self.file_dir[-3:] !='txt' and  self.file_dir[-3:] !='pdf'):
@@ -197,7 +209,7 @@ class MainWindow(QWidget):
         return client
     def pull(self):
         self.scp.put(self.file_dir,self.remote_dir)
-        stdin, stdout, stderr = self.ssh.exec_command("cd test;python3 p_test.py")
+        stdin, stdout, stderr = self.ssh.exec_command(self.program_dir)
         get_error = error(1)
         get_error.exec()
 
