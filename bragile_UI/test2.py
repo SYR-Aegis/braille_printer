@@ -87,6 +87,7 @@ class setting(QDialog):
         self.id = self.label7.text()
         self.password = self.label8.text()
         self.remote_dir=self.label10.text()
+        self.program_dir=self.label12.text()
         self.close()
 
 
@@ -181,7 +182,6 @@ class MainWindow(QWidget):
         self.printer_password=set.password
         self.remote_dir=set.remote_dir
         self.program_dir=set.program_dir
-        print(self.remote_dir)
         self.label6.setText("Printer IP:"+self.printer_ip)
         self.label7.setText("Printer Port:"+self.printer_port)
         self.label8.setText("Remote Path:"+self.remote_dir)
@@ -193,6 +193,7 @@ class MainWindow(QWidget):
             get_error.exec()
         else:
             self.SSH_set()
+            print('-----------------------')
             self.pull()
 
     def SSH_set(self):
@@ -209,7 +210,15 @@ class MainWindow(QWidget):
         return client
     def pull(self):
         self.scp.put(self.file_dir,self.remote_dir)
-        stdin, stdout, stderr = self.ssh.exec_command(self.program_dir)
+        tmp_file_name=None
+        if self.file_dir != None:
+            tmp_dir=self.file_dir.split('/')
+            tmp_file_name=tmp_dir[-1]
+        else:
+            get_error =error(0)
+            get_error.exec()
+        print(self.program_dir+' '+tmp_file_name)
+        stdin, stdout, stderr = self.ssh.exec_command(self.program_dir+' '+tmp_file_name)
         get_error = error(1)
         get_error.exec()
 
